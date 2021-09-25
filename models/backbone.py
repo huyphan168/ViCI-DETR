@@ -104,6 +104,10 @@ class Backbone(BackboneBase):
             replace_stride_with_dilation=[False, False, dilation],
             pretrained=is_main_process(), norm_layer=norm_layer)
         assert name not in ('resnet18', 'resnet34'), "number of channels are hard coded"
+        if name == 'resnet50':
+            checkpoint = torch.hub.load_state_dict_from_url('https://dl.fbaipublicfiles.com/deepcluster/swav_800ep_pretrain.pth.tar',map_location="cpu")
+            state_dict = {k.replace("module.", ""): v for k, v in checkpoint.items()}
+            backbone.load_state_dict(state_dict, strict=False)
         super().__init__(backbone, train_backbone, return_interm_layers)
         if dilation:
             self.strides[-1] = self.strides[-1] // 2

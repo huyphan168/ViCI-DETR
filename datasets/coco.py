@@ -19,8 +19,8 @@ import torch.utils.data
 from pycocotools import mask as coco_mask
 
 from .torchvision_datasets import CocoDetection as TvCocoDetection
-from util.misc import get_local_rank, get_local_size
-import datasets.transforms as T
+from ..util.misc import get_local_rank, get_local_size
+from . import transforms as T
 
 
 class CocoDetection(TvCocoDetection):
@@ -70,7 +70,6 @@ class ConvertCocoPolysToMask(object):
         anno = target["annotations"]
 
         anno = [obj for obj in anno if 'iscrowd' not in obj or obj['iscrowd'] == 0]
-
         boxes = [obj["bbox"] for obj in anno]
         # guard against no boxes via resizing
         boxes = torch.as_tensor(boxes, dtype=torch.float32).reshape(-1, 4)
@@ -151,6 +150,12 @@ def make_coco_transforms(image_set):
             normalize,
         ])
 
+    if image_set == "class_queries_gen":
+        return T.Compose([
+            T.ToTensor(),
+            T.QueriesGNormalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+        ])
+    
     raise ValueError(f'unknown {image_set}')
 
 

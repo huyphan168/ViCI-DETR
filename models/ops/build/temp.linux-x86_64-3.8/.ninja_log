@@ -1,0 +1,6 @@
+# ninja log v5
+0	3188	1632362912100198291	/home/aiotlab/projects/huyvinuni/RFC/Deformable-DETR/models/ops/build/temp.linux-x86_64-3.8/home/aiotlab/projects/huyvinuni/RFC/Deformable-DETR/models/ops/src/cpu/ms_deform_attn_cpu.o	57c61c15c7d2a214
+0	16372	1632362925276181621	/home/aiotlab/projects/huyvinuni/RFC/Deformable-DETR/models/ops/build/temp.linux-x86_64-3.8/home/aiotlab/projects/huyvinuni/RFC/Deformable-DETR/models/ops/src/vision.o	dd3a5883816a324c
+2	3066	1632496480099350283	/home/aiotlab/projects/huyvinuni/RFC/Deformable-DETR/models/ops/build/temp.linux-x86_64-3.8/home/aiotlab/projects/huyvinuni/RFC/Deformable-DETR/models/ops/src/cpu/ms_deform_attn_cpu.o	690968c4c19b85cd
+2	11454	1632496488479417827	/home/aiotlab/projects/huyvinuni/RFC/Deformable-DETR/models/ops/build/temp.linux-x86_64-3.8/home/aiotlab/projects/huyvinuni/RFC/Deformable-DETR/models/ops/src/cuda/ms_deform_attn_cuda.o	111935f54ea31df2
+2	18205	1632496495231472249	/home/aiotlab/projects/huyvinuni/RFC/Deformable-DETR/models/ops/build/temp.linux-x86_64-3.8/home/aiotlab/projects/huyvinuni/RFC/Deformable-DETR/models/ops/src/vision.o	6c43406b59e0482e

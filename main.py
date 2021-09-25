@@ -22,7 +22,7 @@ import datasets
 import util.misc as utils
 import datasets.samplers as samplers
 from datasets import build_dataset, get_coco_api_from_dataset
-from engine import evaluate, train_one_epoch
+from engine import evaluate, train_one_epoch, few_shot_evaluate
 from models import build_model
 
 
@@ -64,9 +64,9 @@ def get_args_parser():
     parser.add_argument('--num_feature_levels', default=4, type=int, help='number of feature levels')
 
     # * Transformer
-    parser.add_argument('--enc_layers', default=6, type=int,
+    parser.add_argument('--enc_layers', default=5, type=int,
                         help="Number of encoding layers in the transformer")
-    parser.add_argument('--dec_layers', default=6, type=int,
+    parser.add_argument('--dec_layers', default=5, type=int,
                         help="Number of decoding layers in the transformer")
     parser.add_argument('--dim_feedforward', default=1024, type=int,
                         help="Intermediate size of the feedforward layers in the transformer blocks")
@@ -106,8 +106,9 @@ def get_args_parser():
     parser.add_argument('--focal_alpha', default=0.25, type=float)
 
     # dataset parameters
-    parser.add_argument('--dataset_file', default='coco')
-    parser.add_argument('--coco_path', default='./data/coco', type=str)
+    parser.add_argument('--dataset_file', default='few_coco')
+    parser.add_argument('--dataset_name', default='base')
+    parser.add_argument('--coco_path', default='/mnt/disk1/huyvinuni/datasets/coco', type=str)
     parser.add_argument('--coco_panoptic_path', type=str)
     parser.add_argument('--remove_difficult', action='store_true')
 
@@ -256,13 +257,12 @@ def main(args):
             args.start_epoch = checkpoint['epoch'] + 1
         # check the resumed model
         if not args.eval:
-            test_stats, coco_evaluator = evaluate(
-                model, criterion, postprocessors, data_loader_val, base_ds, device, args.output_dir
-            )
+            test_stats, coco_evaluator = few_shot_evaluate(
+                model, criterion, postprocessors, data_loader_val, base_ds, device, args.dataset_name)
     
     if args.eval:
-        test_stats, coco_evaluator = evaluate(model, criterion, postprocessors,
-                                              data_loader_val, base_ds, device, args.output_dir)
+        test_stats, coco_evaluator = few_shot_evaluate(model, criterion, postprocessors,
+                                              data_loader_val, base_ds, device, args.dataset_name)
         if args.output_dir:
             utils.save_on_master(coco_evaluator.coco_eval["bbox"].eval, output_dir / "eval.pth")
         return
@@ -289,9 +289,8 @@ def main(args):
                     'args': args,
                 }, checkpoint_path)
 
-        test_stats, coco_evaluator = evaluate(
-            model, criterion, postprocessors, data_loader_val, base_ds, device, args.output_dir
-        )
+        test_stats, coco_evaluator = few_shot_evaluate(
+            model, criterion, postprocessors, data_loader_val, base_ds, device, args.dataset_name)
 
         log_stats = {**{f'train_{k}': v for k, v in train_stats.items()},
                      **{f'test_{k}': v for k, v in test_stats.items()},

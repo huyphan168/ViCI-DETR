@@ -11,6 +11,8 @@ import torch.utils.data
 from .torchvision_datasets import CocoDetection
 
 from .coco import build as build_coco
+from .few_coco import build as build_few_coco
+from .builtin_meta import _get_coco_fewshot_instances_meta
 
 
 def get_coco_api_from_dataset(dataset):
@@ -26,6 +28,8 @@ def get_coco_api_from_dataset(dataset):
 def build_dataset(image_set, args):
     if args.dataset_file == 'coco':
         return build_coco(image_set, args)
+    if args.dataset_file == 'few_coco':
+        return build_few_coco(image_set, args)
     if args.dataset_file == 'coco_panoptic':
         # to avoid making panopticapi required for coco
         from .coco_panoptic import build as build_coco_panoptic

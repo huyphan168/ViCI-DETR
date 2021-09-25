@@ -79,6 +79,8 @@ class DeformableDETR(nn.Module):
                     nn.GroupNorm(32, hidden_dim),
                 )])
         self.backbone = backbone
+        for params in self.backbone.parameters():
+            params.requires_grad = False
         self.aux_loss = aux_loss
         self.with_box_refine = with_box_refine
         self.two_stage = two_stage
@@ -442,9 +444,8 @@ class MLP(nn.Module):
 
 
 def build(args):
-    num_classes = 20 if args.dataset_file != 'coco' else 91
-    if args.dataset_file == "coco_panoptic":
-        num_classes = 250
+    if args.dataset_name == "base":
+        num_classes = 61
     device = torch.device(args.device)
 
     backbone = build_backbone(args)
