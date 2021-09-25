@@ -2,7 +2,7 @@
 =======
 This is the official PyTorch implementation and models [ViCI paper]:
 ```
-@InProceedings{Huy_2022_CVPR,
+@InProceedings{Huy_2021,
     author    = {Huy Phan},
     title     = {ViCI**: Visual Characteristics Injecting with DETR for Continual, Few-shot Object Detection},
     month     = {October},
